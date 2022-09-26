@@ -7,6 +7,12 @@ public abstract class  Person {
     String email;
     String password;
 
+    public Person(String nom,String prénom,String email,String password){
+        this.nom = nom;
+        this.prénom = prénom;
+        this.email = email;
+        this.password = password;
+    }
 
     public abstract boolean login();
 
