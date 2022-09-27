@@ -9,16 +9,13 @@ public class actorsSwitcher {
 
 
 
-    public Person loginActor(int actorNumber){
-        switch (actorNumber){
-            case 1 -> {
-                return new Adminstrateur();
+    public Person actorToRegister(String acteurName,String nom ,String prénom,String email,String password){
+        switch (acteurName){
+            case "Formateur"-> {
+                return new Formateur(nom,prénom,email,password);
             }
-            case 2 -> {
-                return new Formateur();
-            }
-            case 3 -> {
-                return new Apprenant();
+            case "Acteur"-> {
+                return new Apprenant(nom,prénom,email,password);
             }
             default ->{
                 return null;

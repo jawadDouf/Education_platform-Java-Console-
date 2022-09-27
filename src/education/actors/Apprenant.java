@@ -6,8 +6,8 @@ public class Apprenant extends Person{
 
     }
 
-    public Apprenant(String nom,String password){
-        super(nom,password);
+    public Apprenant(String nom,String prénom,String email,String password){
+        super(nom,prénom,email,password);
     }
     @Override
     public boolean login(String email,String password) {
