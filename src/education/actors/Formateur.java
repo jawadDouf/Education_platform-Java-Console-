@@ -1,13 +1,29 @@
 package education.actors;
 
 public class Formateur extends Person{
-    public Formateur(String nom, String prénom, String email, String password) {
-        super(nom, prénom, email, password);
+
+
+
+    public Formateur() {
+
+    }
+
+    public Formateur(String nom,String password){
+        super(nom,password);
+    }
+    @Override
+    public boolean login(String email,String password) {
+        if(this.email.equals(email) && this.password.equals(password)){
+            this.toString();
+            return true;
+        }else {
+            return false;
+        }
+
     }
 
     @Override
-    public boolean login() {
-
-        return false;
+    public String toString() {
+        return super.toString();
     }
 }
