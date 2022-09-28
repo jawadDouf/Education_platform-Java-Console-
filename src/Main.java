@@ -21,7 +21,7 @@ public class Main {
 
 
 
-
+        do{
         System.out.print("Entrer votre email : ");
         String emailEntered = sc.nextLine();
         System.out.print("Entrer votre mot de passe : ");
@@ -63,9 +63,10 @@ public class Main {
                 }
                 break;
             } else if (acteurs.indexOf(pr) == acteurs.size()-1) {
-
+                System.out.println("Email ou Mot de passe est faux");
+                continue;
             }
-        }
+        }}while(1<2);
 
 
 
