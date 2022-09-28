@@ -2,6 +2,7 @@ package education.actors;
 
 public class Adminstrateur extends Person{
 
+    private String role = "Adminstrateur";
 
 
 
@@ -23,7 +24,9 @@ public class Adminstrateur extends Person{
         }
     }
 
-
+    public String getRole() {
+        return role;
+    }
     @Override
     public String toString() {
         return super.toString();

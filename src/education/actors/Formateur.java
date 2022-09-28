@@ -2,7 +2,7 @@ package education.actors;
 
 public class Formateur extends Person{
 
-
+    private String role = "Formateur";
 
     public Formateur() {
 
@@ -20,6 +20,10 @@ public class Formateur extends Person{
             return false;
         }
 
+    }
+
+    public String getRole() {
+        return role;
     }
 
     @Override

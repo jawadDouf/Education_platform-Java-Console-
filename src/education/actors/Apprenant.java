@@ -1,7 +1,7 @@
 package education.actors;
 
 public class Apprenant extends Person{
-
+    private String role = "Apprenant";
     public Apprenant() {
 
     }
@@ -18,6 +18,10 @@ public class Apprenant extends Person{
             return false;
         }
 
+    }
+
+    public String getRole() {
+        return role;
     }
 
     @Override
