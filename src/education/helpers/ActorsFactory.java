@@ -10,10 +10,10 @@ public class ActorsFactory {
 
     public Person actorToRegister(String acteurName,String nom ,String prénom,String email,String password){
         switch (acteurName){
-            case "Formateur"-> {
+            case "Formateur" -> {
                 return new Formateur(nom,prénom,email,password);
             }
-            case "Acteur"-> {
+            case "Apprenant"-> {
                 return new Apprenant(nom,prénom,email,password);
             }
             default ->{

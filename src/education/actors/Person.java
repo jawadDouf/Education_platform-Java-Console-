@@ -7,7 +7,8 @@ public abstract class  Person {
     protected String email;
     protected String password;
 
-     String profession;
+
+
 
     public String getNom() {
         return nom;
@@ -33,11 +34,16 @@ public abstract class  Person {
         this.email = email;
         this.password = password;
     }
+
     public Person(){
 
     }
 
-    public abstract boolean login(String email,String password);
+
+
+
+
+    public abstract boolean login(String email, String password);
 
     @Override
     public String toString() {
@@ -46,4 +52,7 @@ public abstract class  Person {
                 ", prénom='" + prénom + '\'' +
                 '}';
     }
+
+
+
 }
