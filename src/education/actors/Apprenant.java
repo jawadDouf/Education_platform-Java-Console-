@@ -1,13 +1,18 @@
 package education.actors;
 
+import education.nonActors.Promotion;
+
 public class Apprenant extends Person{
-    private String role = "Apprenant";
+
+    private Promotion apprenantPromo;
     public Apprenant() {
 
     }
 
     public Apprenant(String nom,String prénom,String email,String password){
+
         super(nom,prénom,email,password);
+
     }
     @Override
     public boolean login(String email,String password) {
@@ -20,9 +25,15 @@ public class Apprenant extends Person{
 
     }
 
-    public String getRole() {
-        return role;
+    public Promotion getApprenantPromo() {
+        return apprenantPromo;
     }
+
+    public void setApprenantPromo(Promotion apprenantPromo) {
+        this.apprenantPromo = apprenantPromo;
+    }
+
+
 
     @Override
     public String toString() {

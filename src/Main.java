@@ -1,5 +1,6 @@
 import education.actors.*;
 import education.helpers.ActorsFactory;
+import education.nonActors.Promotion;
 
 import java.util.*;
 
@@ -8,38 +9,63 @@ public class Main {
     public static void main(String[] args) {
         //Imported Classes
          Scanner sc = new Scanner(System.in);
-        ActorsFactory af = new ActorsFactory();
+         ActorsFactory af = new ActorsFactory();
+
        //List des acteurs(Adminstrateurs,Formateurs,Apprenants)
          List<Person> acteurs = new ArrayList<>();
-
+         acteurs.add(new Adminstrateur("Jawad","DOUFARE","JD@gmail.com","12345678"));
+         acteurs.add(new Formateur("TOUILEB","Ilyass","TI@gmail.com","AZERTYUI"));
+         List<Promotion> promotions = new ArrayList<>();
+         promotions.add(new Promotion("Java 2",20));
          // Starting Menu
+
+
+
+
         System.out.print("Entrer votre email : ");
         String emailEntered = sc.nextLine();
         System.out.print("Entrer votre mot de passe : ");
         String motDePasseEntered = sc.nextLine();
        //Verification des données saiser par l'utilisateur
-
-
         for (Person pr : acteurs){
             if(pr.getEmail().equals(emailEntered) && pr.getPassword().equals(motDePasseEntered)){
-                System.out.println("Bienvenu dans votre compte Mr" + pr.getNom() + " " + pr.getPrénom());
-                if (pr.getRole().equals("Administrateur")){
+                System.out.println("Bienvenu dans votre compte Mr." + pr.getNom() + " " + pr.getPrénom());
+                if (pr instanceof Adminstrateur){
                     menuAdmin();
                     int choix = sc.nextInt();
                     switch (choix){
-                        case 1 -> ajouterActeur(sc,acteurs,af);
-                        case 2 -> System.out.println();
+                        case 1 -> ((Adminstrateur) pr).ajouterActeur(sc,acteurs,af);
+                        case 2 -> ((Adminstrateur) pr).creerPromo(promotions,sc);
+                        case 3 -> {
+                            listsDesPromotions(promotions);
+                            System.out.print("Choisissez La promotion : ");
+                            int choix2 = sc.nextInt();
+                            while (choix2>0 && choix2 < promotions.size()){
+                                System.out.print("Choisissez Le promotion");
+                                choix2 = sc.nextInt();
+                            }
+                            listsDesFormateurs(acteurs);
+                            System.out.print("Choisissez Le formateur : ");
+                            int choix3 = sc.nextInt();
+                            while (choix3 <=0 && choix3 >= acteurs.size()){
+                                System.out.print("Choisissez Le formateur : ");
+                                choix3 = sc.nextInt();
+                            }
+                            ((Formateur) acteurs.get(choix3)).setFormateurPromo(promotions.get(choix2));
+
+                        }
                         default -> System.out.println();
                     }
-                }else if(pr.getRole().equals("Formateur")){
+                }else if(pr instanceof Formateur){
                     menuFormateur();
                 }else{
                     menuApprenant();
                 }
                 break;
+            } else if (acteurs.indexOf(pr) == acteurs.size()-1) {
+
             }
         }
-
 
 
 
@@ -49,8 +75,8 @@ public class Main {
     //les menus
 // Adminstrateur Menu
     public static void menuAdmin(){
-        System.out.println("1.Ajouter un apprenant.");
-        System.out.println("2.Ajouter un formateur. ");
+        System.out.println("1.Ajouter un apprenant/Formateur.");
+        System.out.println("2.Creer Un promo .");
         System.out.println("3.Attribue une promo à chaque formateur.");
         System.out.print("Entrer votre choix : ");
 
@@ -69,23 +95,23 @@ public class Main {
         System.out.print("Entrer votre choix : ");
     }
 
-    //les opération
-    //Adminstrateur Opération
-    public static void ajouterActeur(Scanner sc,List<Person> acteurs,ActorsFactory af){
-        System.out.print("Entrer le nom : ");
-        String nomEntered = sc.nextLine();
-        System.out.print("Entrer le prénom : ");
-        String prénomEnterd = sc.nextLine();
-        System.out.print("Entrer l'email : ");
-        String emailEnteredByAdmin = sc.nextLine();
-        System.out.print("Entrer le mot de passe : ");
-        String motDePasseEnteredByAdmin = sc.nextLine();
-        System.out.print("Entrer le type d'utilisateur : ");
-        String acteurNom = sc.nextLine();
-        //entering the user
-        acteurs.add(af.actorToRegister(acteurNom,nomEntered,prénomEnterd,emailEnteredByAdmin,motDePasseEnteredByAdmin));
-        System.out.println(acteurs.get(0));
+    //Promotions menu
+
+    public static void listsDesPromotions(List<Promotion> promotions){
+        for (Promotion promo: promotions
+             ) {
+            System.out.println(promotions.indexOf(promo)+"."+promo.getNom()+".");
+        }
     }
+
+    public static void listsDesFormateurs(List<Person> acteurs) {
+        for (Person acteur : acteurs
+        ) {
+            if (acteur instanceof Formateur)
+                System.out.println(acteurs.indexOf(acteur) + "." + acteur.getNom() + ".");
+        }
+    }
+
 }
 
 
