@@ -1,11 +1,10 @@
 package education.helpers;
 
-import education.actors.Adminstrateur;
 import education.actors.Apprenant;
 import education.actors.Formateur;
 import education.actors.Person;
 
-public class actorsSwitcher {
+public class ActorsFactory {
 
 
 
