@@ -30,17 +30,18 @@ public class Adminstrateur extends Person{
 
 
     public  void ajouterActeur(Scanner sc, List<Person> acteurs, ActorsFactory af){
+        Scanner s1 = new Scanner(System.in);
         System.out.print("Entrer le nom : ");
-        String nomEntered = sc.nextLine();
+        String nomEntered = s1.nextLine();
         sc.nextLine();
         System.out.print("Entrer le prénom : ");
         String prénomEnterd = sc.nextLine();
 
         System.out.print("Entrer l'email : ");
-        String emailEnteredByAdmin = sc.nextLine();
+        String emailEnteredByAdmin = s1.nextLine();
 
         System.out.print("Entrer le mot de passe : ");
-        String motDePasseEnteredByAdmin = sc.nextLine();
+        String motDePasseEnteredByAdmin = s1.nextLine();
 
         System.out.print("Entrer le type d'utilisateur : ");
         String acteurNom = sc.nextLine();
