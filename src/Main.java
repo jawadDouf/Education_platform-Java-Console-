@@ -17,6 +17,7 @@ public class Main {
          List<Person> acteurs = new ArrayList<>();
          acteurs.add(new Adminstrateur("Jawad","DOUFARE","JD@gmail.com","12345678"));
          acteurs.add(new Formateur("TOUILEB","Ilyass","TI@gmail.com","AZERTYUI"));
+         acteurs.add(new Apprenant("Elmzoudi","Houssame","EH@gmail.com","11112222"));
          //List des promotions
          List<Promotion> promotions = new ArrayList<>();
          promotions.add(new Promotion("Java 2",20));
@@ -46,10 +47,9 @@ public class Main {
                             case 2 -> ((Adminstrateur) pr).creerPromo(promotions, sc);
                             case 3 -> {
                                 listsDesPromotionsSansFormateur(promotions);
-
                                 int choix2 = -3;
                                 while (!listDesIndexes.contains(choix2)) {
-                                    System.out.print("Choisissez Le promotion");
+                                    System.out.print("Choisissez La promotion");
                                     choix2 = sc.nextInt();
                                 }
                                 listsDesFormateursSansPromo(acteurs);
@@ -59,6 +59,7 @@ public class Main {
                                     choix3 = sc.nextInt();
                                 }
                                 ((Formateur) acteurs.get(choix3)).setFormateurPromo(promotions.get(choix2));
+                                promotions.get(choix2).setFormateur((Formateur) acteurs.get(choix3));
 
                             }
                             default -> System.out.println();
@@ -72,23 +73,40 @@ public class Main {
                         choix = sc.nextInt();
                         switch (choix){
                             case 1 -> {
-                                System.out.println("Nom de Promo : " + ((Formateur) pr).getFormateurPromo().getNom());
-                                listDesApprenantsDePromo(acteurs,((Formateur) pr).getFormateurPromo().getNom());
-                            }
-                            case 2 -> {
-                                System.out.println("-Les Apprenants Vallable est : ");
-                                listDesApprenantsSansPromo(acteurs);
-                                System.out.println("-Saiser le nombre d'apprenant pour le choisissez :");
-                                System.out.println("*Saiser Q pour sortir.");
-                                String choix3 = "A";
-                                while (!choix3.equals("Q")){
-                                    System.out.println("-Saiser le nombre : ");
-                                    choix3 = sc.nextLine();
-                                    if(!listDesIndexes.contains(Integer.parseInt(choix3))){
-                                        System.out.println("Cette apprenant n'est pas vallable .");
+                                try {
+                                    System.out.println("Nom de Promo : " + ((Formateur) pr).getFormateurPromo().getNom());
+                                    try{
+                                        listDesApprenantsDePromo(acteurs,((Formateur) pr).getFormateurPromo().getNom());
+                                    }catch(Exception e) {
+                                        System.out.println("Tu n'a pas encore ajouter des apprenants à votre  promo");
                                         continue;
                                     }
-                                    ((Apprenant) acteurs.get(Integer.parseInt(choix3))).setApprenantPromo(((Formateur) pr).getFormateurPromo());
+                                }catch (Exception e){
+                                    System.out.println("Tu n'a pas assigner un promo");
+                                    continue;
+                                }
+
+                            }
+                            case 2 -> {
+                                try {
+                                    ((Formateur) pr).getFormateurPromo();
+                                    System.out.println("-Les Apprenants Vallable est : ");
+                                    listDesApprenantsSansPromo(acteurs);
+                                    System.out.println("-Saiser le nombre d'apprenant pour le choisissez :");
+                                    System.out.println("*Saiser 0 pour sortir.");
+                                    int choix3 = -1;
+                                    while (choix3 != 0){
+                                        System.out.println("-Saiser le nombre : ");
+                                        choix3 = sc.nextInt();
+                                        if(!listDesIndexes.contains(choix3)){
+                                            System.out.println("Cette apprenant n'est pas vallable .");
+                                            continue;
+                                        }
+                                        ((Apprenant) acteurs.get(choix3)).setApprenantPromo(((Formateur) pr).getFormateurPromo());
+                                    }
+                                 }catch(Exception e){
+                                    System.out.println("Tu n'a pas encore assigner un promotion");
+                                    continue;
                                 }
                             }
                             default -> System.out.println();
@@ -142,10 +160,16 @@ public class Main {
         listDesIndexes.clear();
         for (Promotion promo: promotions
              ) {
-            if(promo.getFormateur().equals(null)){
+            if(promo.getFormateur() == null){
                 listDesIndexes.add(promotions.indexOf(promo));
                 System.out.println(promotions.indexOf(promo)+"."+promo.getNom()+".");
+                continue;
             }
+
+
+
+
+
 
         }
     }
@@ -155,9 +179,15 @@ public class Main {
         for (Person acteur : acteurs
         ) {
 
-            if (acteur instanceof Formateur && ((Formateur) acteur).getFormateurPromo().equals(null)){
-                listDesIndexes.add(acteurs.indexOf(acteur));
-                System.out.println(acteurs.indexOf(acteur) + "." + acteur.getNom() + ".");
+            if (acteur instanceof Formateur){
+                     if(((Formateur) acteur).getFormateurPromo() == null){
+                         listDesIndexes.add(acteurs.indexOf(acteur));
+                         System.out.println(acteurs.indexOf(acteur) + "." + acteur.getNom() + ".");
+
+                     }
+
+
+
             }
 
 
@@ -168,9 +198,17 @@ public class Main {
         listDesIndexes.clear();
         for (Person acteur : acteurs
         ) {
-            if (acteur instanceof Apprenant && ((Apprenant) acteur).getApprenantPromo().equals(null)) {
-                listDesIndexes.add(acteurs.indexOf(acteur));
-                System.out.println(acteurs.indexOf(acteur) + "." + acteur.getNom() + ".");
+            if (acteur instanceof Apprenant) {
+
+                   if(((Apprenant) acteur).getApprenantPromo()==null){
+                       listDesIndexes.add(acteurs.indexOf(acteur));
+                       System.out.println(acteurs.indexOf(acteur) + "." + acteur.getNom() + ".");
+                   }
+
+
+
+
+
             }
 
         }
@@ -180,9 +218,14 @@ public class Main {
     public static void listDesApprenantsDePromo(List<Person> acteurs ,String promoNom){
         listDesIndexes.clear();
         for (Person acteur: acteurs) {
-            if (acteur instanceof Apprenant && ((Apprenant) acteur).getApprenantPromo().getNom().equals(promoNom)){
-                listDesIndexes.add(acteurs.indexOf(acteur));
-                System.out.println(acteurs.indexOf(acteur)+ "." + acteur.getNom() + ".");
+            if (acteur instanceof Apprenant){
+
+                    if(((Apprenant) acteur).getApprenantPromo().getNom().equals(promoNom)){
+                        listDesIndexes.add(acteurs.indexOf(acteur));
+                        System.out.println(acteurs.indexOf(acteur)+ "." + acteur.getNom() + ".");
+                    }
+
+
             }
         }
     }
