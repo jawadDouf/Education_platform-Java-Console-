@@ -8,13 +8,6 @@ import java.util.Scanner;
 
 public class Adminstrateur extends Person{
 
-
-    {
-
-    }
-
-
-
     public Adminstrateur() {
 
     }
@@ -42,7 +35,7 @@ public class Adminstrateur extends Person{
         sc.nextLine();
         System.out.print("Entrer le prénom : ");
         String prénomEnterd = sc.nextLine();
-        sc.nextLine();
+
         System.out.print("Entrer l'email : ");
         String emailEnteredByAdmin = sc.nextLine();
 
@@ -57,11 +50,13 @@ public class Adminstrateur extends Person{
     }
 
     public void creerPromo(List<Promotion> promotions,Scanner sc){
-        System.out.print("Entrer le nom de promos : ");
-        String nom = sc.nextLine();
-        sc.nextLine();
+        Scanner s = new Scanner(System.in);
         System.out.print("Entrer le nombres des étudions : ");
         int size = sc.nextInt();
+
+
+        System.out.print("Entrer le nom de promos : ");
+        String nom = s.nextLine();
         promotions.add(new Promotion(nom,size));
 
     }
