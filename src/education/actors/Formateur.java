@@ -1,8 +1,10 @@
 package education.actors;
 
+import education.helpers.ActorsFactory;
 import education.nonActors.Brief;
 import education.nonActors.Promotion;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Formateur extends Person{
@@ -41,30 +43,31 @@ public class Formateur extends Person{
 
     }
 
-     public Brief creerBrief(){
-        Scanner sc = new Scanner(System.in);
+     public Brief creerBrief() throws IOException {
+
         StringBuilder brief = new StringBuilder();
         System.out.print("Entrer le titre de brief : ");
-        String titre = sc.nextLine();
-        brief.append(titre);
-        brief.append("/n");
-        brief.append("/n");
+        String titre = ActorsFactory.br.readLine();
+        brief.append("Titre de brief : " + titre);
+        brief.append("\n");
         brief.append("Languages :");
         System.out.print("Entrer les language de ce brief (Entrer Q pour arreter) : ");
-        String language = sc.nextLine();
+        String language = ActorsFactory.br.readLine();
         brief.append(" "+language);
         while(!language.equals("Q")){
-            language = sc.nextLine();
+            language = ActorsFactory.br.readLine();
             brief.append(" "+language);
         }
-        brief.append("/n");
+        brief.append("\n");
+        brief.append("Description :");
+         brief.append("\n");
         System.out.println("Entrer le description de ce brief : ");
         System.out.println("*Entrer Q pour finaliser .");
-        String line = sc.nextLine();
+        String line = ActorsFactory.br.readLine();
         brief.append(line);
         while (!line.equals("Q")){
-            line = sc.nextLine();
-            brief.append("/n");
+            line = ActorsFactory.br.readLine();
+            brief.append("\n");
             brief.append(line);
         }
 

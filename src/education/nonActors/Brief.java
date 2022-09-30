@@ -2,11 +2,16 @@ package education.nonActors;
 
 import education.actors.Formateur;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
 public class Brief {
 
 
 
     private StringBuilder body;
+
+
 
     private Formateur formateur;
     public Brief(StringBuilder body,Formateur formateur){
