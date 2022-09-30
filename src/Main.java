@@ -1,5 +1,6 @@
 import education.actors.*;
 import education.helpers.ActorsFactory;
+import education.nonActors.Brief;
 import education.nonActors.Promotion;
 
 import java.util.*;
@@ -8,6 +9,7 @@ import java.util.*;
 public class Main {
     //Global Variables
     static List<Integer> listDesIndexes = new ArrayList<>();
+
     public static void main(String[] args) {
         //Imported Classes
          Scanner sc = new Scanner(System.in);
@@ -21,8 +23,6 @@ public class Main {
          //List des promotions
          List<Promotion> promotions = new ArrayList<>();
          promotions.add(new Promotion("Java 2",20));
-
-
          // Starting Menu
 
 
@@ -107,6 +107,15 @@ public class Main {
                                  }catch(Exception e){
                                     System.out.println("Tu n'a pas encore assigner un promotion");
                                     continue;
+                                }
+                            }
+                            case 3 -> {
+                                Brief br = ((Formateur) pr).creerBrief();
+                                System.out.println("Le brief va  destribue à ");
+                                listDesApprenantsDePromo(acteurs,((Formateur) pr).getNom());
+                                for (int i :listDesIndexes
+                                     ) {
+                                    ((Apprenant) acteurs.get(i)).setBriefActuel(br);
                                 }
                             }
                             default -> System.out.println();
@@ -219,13 +228,10 @@ public class Main {
         listDesIndexes.clear();
         for (Person acteur: acteurs) {
             if (acteur instanceof Apprenant){
-
                     if(((Apprenant) acteur).getApprenantPromo().getNom().equals(promoNom)){
                         listDesIndexes.add(acteurs.indexOf(acteur));
                         System.out.println(acteurs.indexOf(acteur)+ "." + acteur.getNom() + ".");
                     }
-
-
             }
         }
     }
