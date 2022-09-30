@@ -3,16 +3,19 @@ import education.helpers.ActorsFactory;
 import education.nonActors.Brief;
 import education.nonActors.Promotion;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.*;
 
 
-public class Main {
+public class Main2 {
     //Global Variables
-    static List<Integer> listDesIndexes = new ArrayList<>();
+   public static List<Integer> listDesIndexes = new ArrayList<>();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         //Imported Classes
-         Scanner sc = new Scanner(System.in);
          ActorsFactory af = new ActorsFactory();
 
        //List des acteurs(Adminstrateurs,Formateurs,Apprenants)
@@ -29,10 +32,9 @@ public class Main {
 
         do{
         System.out.print("Entrer votre email : ");
-        String emailEntered = sc.nextLine();
-        sc.nextLine();
+        String emailEntered = ActorsFactory.br.readLine();
         System.out.print("Entrer votre mot de passe : ");
-        String motDePasseEntered = sc.nextLine();
+        String motDePasseEntered = ActorsFactory.br.readLine();
        //Verification des données saiser par l'utilisateur
         for (Person pr : acteurs){
             if(pr.getEmail().equals(emailEntered) && pr.getPassword().equals(motDePasseEntered)){
@@ -41,22 +43,22 @@ public class Main {
                 if (pr instanceof Adminstrateur){
                     while (choix != 0) {
                         menuAdmin();
-                        choix = sc.nextInt();
+                        choix = Integer.parseInt(ActorsFactory.br.readLine());
                         switch (choix) {
-                            case 1 -> ((Adminstrateur) pr).ajouterActeur(sc, acteurs, af);
-                            case 2 -> ((Adminstrateur) pr).creerPromo(promotions, sc);
+                            case 1 -> ((Adminstrateur) pr).ajouterActeur(acteurs, af);
+                            case 2 -> ((Adminstrateur) pr).creerPromo(promotions);
                             case 3 -> {
                                 listsDesPromotionsSansFormateur(promotions);
                                 int choix2 = -3;
                                 while (!listDesIndexes.contains(choix2)) {
                                     System.out.print("Choisissez La promotion");
-                                    choix2 = sc.nextInt();
+                                    choix2 = Integer.parseInt(ActorsFactory.br.readLine());
                                 }
                                 listsDesFormateursSansPromo(acteurs);
                                 int choix3 = -1;
                                 while (!listDesIndexes.contains(choix3)) {
                                     System.out.print("Choisissez Le formateur : ");
-                                    choix3 = sc.nextInt();
+                                    choix3 = Integer.parseInt(ActorsFactory.br.readLine());
                                 }
                                 ((Formateur) acteurs.get(choix3)).setFormateurPromo(promotions.get(choix2));
                                 promotions.get(choix2).setFormateur((Formateur) acteurs.get(choix3));
@@ -70,7 +72,7 @@ public class Main {
 
                     while (choix!=0){
                         menuFormateur();
-                        choix = sc.nextInt();
+                        choix = Integer.parseInt(ActorsFactory.br.readLine());
                         switch (choix){
                             case 1 -> {
                                 try {
@@ -95,9 +97,11 @@ public class Main {
                                     System.out.println("-Saiser le nombre d'apprenant pour le choisissez :");
                                     System.out.println("*Saiser 0 pour sortir.");
                                     int choix3 = -1;
-                                    while (choix3 != 0){
+                                    int i = 0;
+                                    while (choix3 != 0 || i ==listDesIndexes.size()-1){
+                                        i++;
                                         System.out.println("-Saiser le nombre : ");
-                                        choix3 = sc.nextInt();
+                                        choix3 = Integer.parseInt(ActorsFactory.br.readLine());
                                         if(!listDesIndexes.contains(choix3)){
                                             System.out.println("Cette apprenant n'est pas vallable .");
                                             continue;
@@ -111,18 +115,42 @@ public class Main {
                             }
                             case 3 -> {
                                 Brief br = ((Formateur) pr).creerBrief();
+                                System.out.println(br.getBody());
+
                                 System.out.println("Le brief va  destribue à ");
-                                listDesApprenantsDePromo(acteurs,((Formateur) pr).getNom());
+                                listDesApprenantsDePromo(acteurs,((Formateur) pr).getFormateurPromo().getNom());
                                 for (int i :listDesIndexes
                                      ) {
+                                    System.out.println(acteurs.get(i));
                                     ((Apprenant) acteurs.get(i)).setBriefActuel(br);
                                 }
+                            }
+                            case 4->{
+
                             }
                             default -> System.out.println();
                         }
                     }
                 }else{
-                    menuApprenant();
+                    while (choix!=0){
+                        menuApprenant();
+                         choix = Integer.parseInt(ActorsFactory.br.readLine());
+                        switch (choix){
+                            case 1 ->{
+                                if(!((Apprenant) pr).getBriefActuel().equals(null)){
+                                    System.out.println(((Apprenant) pr).getBriefActuel().getBody());
+                                } else {
+                                    System.out.println("Tu n'aucune brief");
+                                }
+                            }
+
+
+                    }
+
+
+                        }
+
+
                 }
                 break;
             } else if (acteurs.indexOf(pr) == acteurs.size()-1) {
@@ -174,13 +202,8 @@ public class Main {
                 System.out.println(promotions.indexOf(promo)+"."+promo.getNom()+".");
                 continue;
             }
-
-
-
-
-
-
         }
+
     }
 
     public static void listsDesFormateursSansPromo(List<Person> acteurs) {
