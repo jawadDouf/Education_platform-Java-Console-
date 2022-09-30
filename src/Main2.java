@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -69,6 +70,7 @@ public class Main2 {
                     }
                 }else if(pr instanceof Formateur){
 
+                    Brief br = null;
 
                     while (choix!=0){
                         menuFormateur();
@@ -114,19 +116,21 @@ public class Main2 {
                                 }
                             }
                             case 3 -> {
-                                Brief br = ((Formateur) pr).creerBrief();
+                                 br = ((Formateur) pr).creerBrief();
                                 System.out.println(br.getBody());
 
-                                System.out.println("Le brief va  destribue à ");
-                                listDesApprenantsDePromo(acteurs,((Formateur) pr).getFormateurPromo().getNom());
-                                for (int i :listDesIndexes
-                                     ) {
-                                    System.out.println(acteurs.get(i));
-                                    ((Apprenant) acteurs.get(i)).setBriefActuel(br);
-                                }
+
                             }
                             case 4->{
-
+                                 if(LocalDate.now().isAfter(br.getStartDate()) && LocalDate.now().isBefore(br.getDeadLine())){
+                                     System.out.println("Le brief va  destribue à ");
+                                     listDesApprenantsDePromo(acteurs,((Formateur) pr).getFormateurPromo().getNom());
+                                     for (int i :listDesIndexes
+                                     ) {
+                                         System.out.println(acteurs.get(i));
+                                         ((Apprenant) acteurs.get(i)).setBriefActuel(br);
+                                     }
+                                 }
                             }
                             default -> System.out.println();
                         }
