@@ -5,6 +5,7 @@ import education.nonActors.Brief;
 import education.nonActors.Promotion;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class Formateur extends Person{
@@ -49,8 +50,8 @@ public class Formateur extends Person{
         System.out.print("Entrer le titre de brief : ");
         String titre = ActorsFactory.br.readLine();
         brief.append("Titre de brief : " + titre);
-        brief.append("\n");
-        brief.append("Languages :");
+         brief.append("\n");
+         brief.append("Languages :");
         System.out.print("Entrer les language de ce brief (Entrer Q pour arreter) : ");
         String language = ActorsFactory.br.readLine();
         brief.append(" "+language);
@@ -60,7 +61,7 @@ public class Formateur extends Person{
         }
         brief.append("\n");
         brief.append("Description :");
-         brief.append("\n");
+        brief.append("\n");
         System.out.println("Entrer le description de ce brief : ");
         System.out.println("*Entrer Q pour finaliser .");
         String line = ActorsFactory.br.readLine();
@@ -70,8 +71,14 @@ public class Formateur extends Person{
             brief.append("\n");
             brief.append(line);
         }
-
-        return new Brief(brief,this);
+        Brief briefToAssign =new Brief(brief,this);
+        System.out.print("Indiquez après combien de jours le projet commencera en jours");
+        int days = Integer.parseInt(ActorsFactory.br.readLine());
+        System.out.print("Indiquez après combien de jours le projet terminera en jours");
+        int daysToEnd = Integer.parseInt(ActorsFactory.br.readLine());
+        briefToAssign.setStartDate(LocalDate.now().plusDays(days));
+        briefToAssign.setDeadLine(LocalDate.now().plusDays(days).plusDays(daysToEnd));
+        return briefToAssign;
      }
 
 
