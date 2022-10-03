@@ -77,7 +77,7 @@ public class Formateur extends Person{
         System.out.print("Indiquez après combien de jours le projet terminera en jours");
         int daysToEnd = Integer.parseInt(ActorsFactory.br.readLine());
         briefToAssign.setStartDate(LocalDate.now().plusDays(days));
-        briefToAssign.setDeadLine(LocalDate.now().plusDays(days).plusDays(daysToEnd));
+        briefToAssign.setDeadLine(briefToAssign.getStartDate().plusDays(daysToEnd));
         return briefToAssign;
      }
 
