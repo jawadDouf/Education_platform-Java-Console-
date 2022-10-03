@@ -1,5 +1,6 @@
 import education.actors.*;
 import education.helpers.ActorsFactory;
+import education.helpers.emailSender;
 import education.nonActors.Brief;
 import education.nonActors.Promotion;
 
@@ -158,6 +159,7 @@ public class Main2 {
                                             &&  LocalDate.now().isEqual(brief.getStartDate())){
                                         ((Apprenant) pr).setBriefActuel(brief);
                                         System.out.println(((Apprenant) pr).getBriefActuel().getBody());
+                                        emailSender es = new emailSender(((Apprenant) pr).getBriefActuel().getBody(),((Apprenant) pr).getEmail(),acteurs);
                                     }
                                 }
 
