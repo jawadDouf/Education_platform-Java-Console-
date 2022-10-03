@@ -7,9 +7,6 @@ import java.io.InputStreamReader;
 import java.time.LocalDate;
 
 public class Brief {
-
-
-
     private StringBuilder body;
     private LocalDate startDate;
     private LocalDate deadLine;

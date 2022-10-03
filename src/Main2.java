@@ -28,7 +28,7 @@ public class Main2 {
          List<Promotion> promotions = new ArrayList<>();
          promotions.add(new Promotion("Java 2",20));
          // Starting Menu
-
+        List<Brief> briefs = new ArrayList<>();
 
 
         do{
@@ -52,7 +52,7 @@ public class Main2 {
                                 listsDesPromotionsSansFormateur(promotions);
                                 int choix2 = -3;
                                 while (!listDesIndexes.contains(choix2)) {
-                                    System.out.print("Choisissez La promotion");
+                                    System.out.print("Choisissez La promotion : ");
                                     choix2 = Integer.parseInt(ActorsFactory.br.readLine());
                                 }
                                 listsDesFormateursSansPromo(acteurs);
@@ -117,20 +117,31 @@ public class Main2 {
                             }
                             case 3 -> {
                                  br = ((Formateur) pr).creerBrief();
-                                System.out.println(br.getBody());
-
-
+                                 System.out.println(br.getBody());
+                                 briefs.add(br);
                             }
+
+
                             case 4->{
-                                 if(LocalDate.now().isAfter(br.getStartDate()) && LocalDate.now().isBefore(br.getDeadLine())){
-                                     System.out.println("Le brief va  destribue à ");
-                                     listDesApprenantsDePromo(acteurs,((Formateur) pr).getFormateurPromo().getNom());
-                                     for (int i :listDesIndexes
-                                     ) {
-                                         System.out.println(acteurs.get(i));
-                                         ((Apprenant) acteurs.get(i)).setBriefActuel(br);
-                                     }
-                                 }
+                                System.out.println("Vos Briefs crées : ");
+                                listDesIndexes.clear();
+                                for (Brief brief:briefs
+                                ) {
+                                    if(brief.getFormateur().getFormateurPromo().equals(((Formateur) pr).getFormateurPromo())
+                                      ){
+                                        listDesIndexes.add(briefs.indexOf(brief));
+                                        System.out.println(briefs.indexOf(brief)+"."+brief.getBody().toString().split("\n")[0]+"=> Ce brief va destribue à : "+brief.getStartDate());
+                                    }
+                                }
+                                System.out.println("Taper le nombre de brief pour le destribuer maintenant .");
+                                int choix9 = Integer.parseInt(ActorsFactory.br.readLine());
+                                while (!listDesIndexes.contains(choix9)){
+                                    System.out.println("N'existe pas,Répeter ");
+                                    System.out.println("Taper le nombre de brief pour le destribuer maintenant .");
+                                    choix9 = Integer.parseInt(ActorsFactory.br.readLine());
+                                }
+                                briefs.get(choix9).setStartDate(LocalDate.now());
+
                             }
                             default -> System.out.println();
                         }
@@ -141,18 +152,22 @@ public class Main2 {
                          choix = Integer.parseInt(ActorsFactory.br.readLine());
                         switch (choix){
                             case 1 ->{
-                                if(!((Apprenant) pr).getBriefActuel().equals(null)){
-                                    System.out.println(((Apprenant) pr).getBriefActuel().getBody());
-                                } else {
-                                    System.out.println("Tu n'aucune brief");
+                                for (Brief brief:briefs
+                                     ) {
+                                    if(brief.getFormateur().getFormateurPromo().equals(((Apprenant) pr).getApprenantPromo())
+                                            &&  LocalDate.now().isEqual(brief.getStartDate())){
+                                        ((Apprenant) pr).setBriefActuel(brief);
+                                        System.out.println(((Apprenant) pr).getBriefActuel().getBody());
+                                    }
                                 }
+
                             }
 
 
                     }
 
 
-                        }
+                    }
 
 
                 }
@@ -214,19 +229,12 @@ public class Main2 {
         listDesIndexes.clear();
         for (Person acteur : acteurs
         ) {
-
             if (acteur instanceof Formateur){
                      if(((Formateur) acteur).getFormateurPromo() == null){
                          listDesIndexes.add(acteurs.indexOf(acteur));
                          System.out.println(acteurs.indexOf(acteur) + "." + acteur.getNom() + ".");
-
                      }
-
-
-
             }
-
-
         }
     }
 
@@ -240,11 +248,6 @@ public class Main2 {
                        listDesIndexes.add(acteurs.indexOf(acteur));
                        System.out.println(acteurs.indexOf(acteur) + "." + acteur.getNom() + ".");
                    }
-
-
-
-
-
             }
 
         }
@@ -262,6 +265,7 @@ public class Main2 {
             }
         }
     }
+
 
 
 }
