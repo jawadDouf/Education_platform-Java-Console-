@@ -2,8 +2,11 @@ package education.actors;
 
 public abstract class  Person {
 
+    int id ;
     String nom;
     String prénom;
+
+    int role;
     protected String email;
     protected String password;
 
@@ -28,7 +31,8 @@ public abstract class  Person {
     }
 
 
-    public Person(String nom, String prénom,String email,String password){
+    public Person(int id,String nom, String prénom,String email,String password){
+        this.id=id;
         this.nom = nom;
         this.prénom = prénom;
         this.email = email;
@@ -40,8 +44,21 @@ public abstract class  Person {
     }
 
 
+    public int getRole() {
+        return role;
+    }
 
+    public void setRole(int role) {
+        this.role = role;
+    }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public abstract boolean login(String email, String password);
 
