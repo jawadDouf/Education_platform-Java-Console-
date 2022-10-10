@@ -2,17 +2,18 @@ package education.nonActors;
 
 import education.actors.Formateur;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.time.LocalDate;
+import java.time.ZoneId;
 
 public class Brief {
+
+    int id;
     private StringBuilder body;
     private LocalDate startDate;
     private LocalDate deadLine;
     private Formateur formateur;
-    public Brief(StringBuilder body,Formateur formateur){
-        this.formateur = formateur;
+    public Brief(StringBuilder body){
+
         this.body = body;
     }
 
@@ -46,5 +47,13 @@ public class Brief {
 
     public void setDeadLine(LocalDate deadLine) {
         this.deadLine = deadLine;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

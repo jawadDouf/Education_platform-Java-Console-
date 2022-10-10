@@ -5,6 +5,9 @@ import education.nonActors.Promotion;
 
 public class Apprenant extends Person{
 
+    {
+        this.setRole(3);
+    }
     private Promotion apprenantPromo;
     private Brief briefActuel;
     public Apprenant() {
@@ -13,8 +16,8 @@ public class Apprenant extends Person{
 
 
 
-    public Apprenant(String nom,String prénom,String email,String password){
-        super(nom,prénom,email,password);
+    public Apprenant(int id,String nom,String prénom,String email,String password){
+        super(id,nom,prénom,email,password);
     }
     @Override
     public boolean login(String email,String password) {

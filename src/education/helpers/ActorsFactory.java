@@ -13,13 +13,13 @@ public class ActorsFactory {
     public static BufferedReader br = new BufferedReader(r);
 
 
-    public Person actorToRegister(String acteurName,String nom ,String prénom,String email,String password){
+    public Person actorToRegister(int id,String acteurName,String nom ,String prénom,String email,String password){
         switch (acteurName){
             case "Formateur" -> {
-                return new Formateur(nom,prénom,email,password);
+                return new Formateur(id,nom,prénom,email,password);
             }
             case "Apprenant"-> {
-                return new Apprenant(nom,prénom,email,password);
+                return new Apprenant(id,nom,prénom,email,password);
             }
             default ->{
                 return null;

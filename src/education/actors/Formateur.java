@@ -1,24 +1,28 @@
 package education.actors;
 
+import education.services.BriefsDB;
 import education.helpers.ActorsFactory;
 import education.nonActors.Brief;
 import education.nonActors.Promotion;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.Scanner;
 
 public class Formateur extends Person{
 
 
 
+    {
+        this.setRole(2);
+    }
     public Formateur() {
 
     }
 
-    public Formateur(String nom,String prénom,String email,String password){
+    public Formateur(int id,String nom,String prénom,String email,String password){
 
-        super(nom,prénom,email,password);
+        super(id,nom,prénom,email,password);
 
     }
     private Promotion formateurPromo;
@@ -31,6 +35,7 @@ public class Formateur extends Person{
     }
 
     public void setFormateurPromo(Promotion formateurPromo) {
+
         this.formateurPromo = formateurPromo;
     }
     @Override
@@ -44,7 +49,7 @@ public class Formateur extends Person{
 
     }
 
-     public Brief creerBrief() throws IOException {
+     public Brief creerBrief() throws IOException, SQLException {
 
         StringBuilder brief = new StringBuilder();
         System.out.print("Entrer le titre de brief : ");
@@ -71,13 +76,15 @@ public class Formateur extends Person{
             brief.append("\n");
             brief.append(line);
         }
-        Brief briefToAssign =new Brief(brief,this);
+        Brief briefToAssign =new Brief(brief);
+        briefToAssign.setFormateur(this);
         System.out.print("Indiquez après combien de jours le projet commencera en jours");
         int days = Integer.parseInt(ActorsFactory.br.readLine());
         System.out.print("Indiquez après combien de jours le projet terminera en jours");
         int daysToEnd = Integer.parseInt(ActorsFactory.br.readLine());
         briefToAssign.setStartDate(LocalDate.now().plusDays(days));
         briefToAssign.setDeadLine(briefToAssign.getStartDate().plusDays(daysToEnd));
+        new BriefsDB().insertRow(briefToAssign);
         return briefToAssign;
      }
 

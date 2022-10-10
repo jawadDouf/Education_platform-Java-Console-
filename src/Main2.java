@@ -1,13 +1,12 @@
 import education.actors.*;
-import education.helpers.ActorsFactory;
-import education.helpers.emailSender;
-import education.nonActors.Brief;
-import education.nonActors.Promotion;
+import education.services.*;
+import education.helpers.*;
+import education.nonActors.*;
 
-import java.io.BufferedReader;
+
+import javax.mail.MessagingException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -16,20 +15,17 @@ public class Main2 {
     //Global Variables
    public static List<Integer> listDesIndexes = new ArrayList<>();
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, MessagingException, SQLException {
         //Imported Classes
          ActorsFactory af = new ActorsFactory();
 
-       //List des acteurs(Adminstrateurs,Formateurs,Apprenants)
-         List<Person> acteurs = new ArrayList<>();
-         acteurs.add(new Adminstrateur("Jawad","DOUFARE","JD@gmail.com","12345678"));
-         acteurs.add(new Formateur("TOUILEB","Ilyass","TI@gmail.com","AZERTYUI"));
-         acteurs.add(new Apprenant("Elmzoudi","Houssame","EH@gmail.com","11112222"));
-         //List des promotions
-         List<Promotion> promotions = new ArrayList<>();
-         promotions.add(new Promotion("Java 2",20));
+        //List des acteurs(Adminstrateurs,Formateurs,Apprenants)
+          List<Person> acteurs =new ComptesDB().getAll();
+         //List des promotions et briefs
+          List<Promotion> promotions =new PromotionsDB().getAll();
+          List<Brief> briefs = new BriefsDB().getAll();
          // Starting Menu
-        List<Brief> briefs = new ArrayList<>();
+
 
 
         do{
@@ -47,8 +43,33 @@ public class Main2 {
                         menuAdmin();
                         choix = Integer.parseInt(ActorsFactory.br.readLine());
                         switch (choix) {
-                            case 1 -> ((Adminstrateur) pr).ajouterActeur(acteurs, af);
-                            case 2 -> ((Adminstrateur) pr).creerPromo(promotions);
+                            case 1 -> {
+
+                                System.out.print("Entrer le nom : ");
+                                String nomEntered =ActorsFactory.br.readLine();
+
+                                System.out.print("Entrer le prénom : ");
+                                String prénomEnterd =ActorsFactory.br.readLine();
+
+                                System.out.print("Entrer l'email : ");
+                                String emailEnteredByAdmin = ActorsFactory.br.readLine();
+
+                                System.out.print("Entrer le mot de passe : ");
+                                String motDePasseEnteredByAdmin = ActorsFactory.br.readLine();
+
+                                System.out.print("Entrer le type d'utilisateur : ");
+                                String acteurNom = ActorsFactory.br.readLine();
+                                acteurs.add(af.actorToRegister(acteurs.get(acteurs.size()-1).getId()+1,acteurNom,nomEntered,prénomEnterd,emailEnteredByAdmin,motDePasseEnteredByAdmin));
+                                new ComptesDB().insertRow(acteurs.get(acteurs.size()-1));
+                            }
+                            case 2 -> {
+                                System.out.print("Entrer le nombres des étudions : ");
+                                int size = Integer.parseInt(ActorsFactory.br.readLine());
+                                System.out.print("Entrer le nom de promos : ");
+                                String nom = ActorsFactory.br.readLine();
+                                new PromotionsMemory().insertRow(new Promotion(promotions.get(promotions.size()-1).getId()+1,nom,size));
+                                new PromotionsDB().insertRow(new Promotion(promotions.get(promotions.size()-1).getId()+1,nom,size));
+                            }
                             case 3 -> {
                                 listsDesPromotionsSansFormateur(promotions);
                                 int choix2 = -3;
@@ -62,9 +83,11 @@ public class Main2 {
                                     System.out.print("Choisissez Le formateur : ");
                                     choix3 = Integer.parseInt(ActorsFactory.br.readLine());
                                 }
-                                ((Formateur) acteurs.get(choix3)).setFormateurPromo(promotions.get(choix2));
-                                promotions.get(choix2).setFormateur((Formateur) acteurs.get(choix3));
-
+                                // ((Formateur) acteurs.get(choix3)).setFormateurPromo(promotions.get(choix2));
+                                new ComptesMemory().updateRow(acteurs.get(choix3),promotions.get(choix2));
+                                new ComptesDB().updateRow(acteurs.get(choix3),promotions.get(choix2));
+                               // promotions.get(choix2).setFormateur((Formateur) acteurs.get(choix3));
+                                new PromotionsMemory().updateRow(promotions.get(choix2),(Formateur) acteurs.get(choix3));
                             }
                             default -> System.out.println();
                         }
@@ -109,7 +132,9 @@ public class Main2 {
                                             System.out.println("Cette apprenant n'est pas vallable .");
                                             continue;
                                         }
-                                        ((Apprenant) acteurs.get(choix3)).setApprenantPromo(((Formateur) pr).getFormateurPromo());
+                                      //  ((Apprenant) acteurs.get(choix3)).setApprenantPromo(((Formateur) pr).getFormateurPromo());
+                                        new ComptesMemory().updateRow(acteurs.get(choix3),((Formateur) pr).getFormateurPromo());
+
                                     }
                                  }catch(Exception e){
                                     System.out.println("Tu n'a pas encore assigner un promotion");
@@ -142,6 +167,7 @@ public class Main2 {
                                     choix9 = Integer.parseInt(ActorsFactory.br.readLine());
                                 }
                                 briefs.get(choix9).setStartDate(LocalDate.now());
+                                new BriefsMemory().updateRow(briefs.get(choix9),((Formateur) pr));
 
                             }
                             default -> System.out.println();
@@ -159,7 +185,7 @@ public class Main2 {
                                             &&  LocalDate.now().isEqual(brief.getStartDate())){
                                         ((Apprenant) pr).setBriefActuel(brief);
                                         System.out.println(((Apprenant) pr).getBriefActuel().getBody());
-                                        emailSender es = new emailSender(((Apprenant) pr).getBriefActuel().getBody(),((Apprenant) pr).getEmail(),acteurs);
+                                        //emailSender es = new emailSender(((Apprenant) pr).getBriefActuel().getBody(),((Apprenant) pr).getEmail(),acteurs);
                                     }
                                 }
 
