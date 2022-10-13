@@ -11,10 +11,21 @@ import java.util.List;
 
 public  class ComptesMemory extends Dao<Person,Promotion> {
 
-   private List<Person> acteurs = new ComptesDB().getAll();
+    static List<Person> acteurs;
 
-    public ComptesMemory() throws SQLException {
+    static {
+        try {
+            acteurs = new ComptesDB().getAll();
+        }catch (SQLException e){
+            System.out.println("Something wrong in the conection with the database .");
+        }
     }
+     public ComptesMemory() throws SQLException {
+
+
+
+
+   }
 
 
     @Override

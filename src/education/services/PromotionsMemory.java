@@ -8,21 +8,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PromotionsMemory extends Dao<Promotion, Formateur> {
-    List<Promotion> promotions = new PromotionsDB().getAll();
+    static List<Promotion> promotions;
+
+    static {
+        try {
+            promotions = new PromotionsDB().getAll();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public PromotionsMemory() throws SQLException {
     }
 
-    public List<Promotion> getPromotions() {
-        return promotions;
-    }
 
-    public void setPromotions(List<Promotion> promotions) {
-        this.promotions = promotions;
-    }
 
     @Override
     public List<Promotion> getAll() throws SQLException {
+
         return promotions;
     }
 

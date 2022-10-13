@@ -19,22 +19,22 @@ public class Main2 {
         //Imported Classes
          ActorsFactory af = new ActorsFactory();
 
-        //List des acteurs(Adminstrateurs,Formateurs,Apprenants)
-          List<Person> acteurs =new ComptesDB().getAll();
-         //List des promotions et briefs
-          List<Promotion> promotions =new PromotionsDB().getAll();
-          List<Brief> briefs = new BriefsDB().getAll();
-         // Starting Menu
-
-
-
+         //initialisation of comptes memory classes .
+          ComptesMemory comptesMemory = new ComptesMemory();
+          ComptesDB comptesDB = new ComptesDB();
+         // initialisation of promotions memory classes
+          PromotionsMemory promotionsMemory = new PromotionsMemory();
+          PromotionsDB promotionsDB = new PromotionsDB();
+        // initialisation of briefs memory classes
+         BriefsMemory briefsMemory = new BriefsMemory();
+         BriefsDB briefsDB = new BriefsDB();
         do{
         System.out.print("Entrer votre email : ");
         String emailEntered = ActorsFactory.br.readLine();
         System.out.print("Entrer votre mot de passe : ");
         String motDePasseEntered = ActorsFactory.br.readLine();
        //Verification des données saiser par l'utilisateur
-        for (Person pr : acteurs){
+        for (Person pr : comptesMemory.getAll()){
             if(pr.getEmail().equals(emailEntered) && pr.getPassword().equals(motDePasseEntered)){
                 System.out.println("Bienvenu dans votre compte Mr." + pr.getNom() + " " + pr.getPrénom());
                 int choix = 9;
@@ -59,35 +59,33 @@ public class Main2 {
 
                                 System.out.print("Entrer le type d'utilisateur : ");
                                 String acteurNom = ActorsFactory.br.readLine();
-                                acteurs.add(af.actorToRegister(acteurs.get(acteurs.size()-1).getId()+1,acteurNom,nomEntered,prénomEnterd,emailEnteredByAdmin,motDePasseEnteredByAdmin));
-                                new ComptesDB().insertRow(acteurs.get(acteurs.size()-1));
+                                comptesMemory.insertRow(af.actorToRegister(comptesMemory.getAll().get(comptesMemory.getAll().size()-1).getId()+1,acteurNom,nomEntered,prénomEnterd,emailEnteredByAdmin,motDePasseEnteredByAdmin));
+                                comptesDB.insertRow(comptesMemory.getAll().get(comptesMemory.getAll().size()-1));
                             }
                             case 2 -> {
                                 System.out.print("Entrer le nombres des étudions : ");
                                 int size = Integer.parseInt(ActorsFactory.br.readLine());
                                 System.out.print("Entrer le nom de promos : ");
                                 String nom = ActorsFactory.br.readLine();
-                                new PromotionsMemory().insertRow(new Promotion(promotions.get(promotions.size()-1).getId()+1,nom,size));
-                                new PromotionsDB().insertRow(new Promotion(promotions.get(promotions.size()-1).getId()+1,nom,size));
+                                promotionsMemory.insertRow(new Promotion(promotionsMemory.getAll().get(promotionsMemory.getAll().size()-1).getId()+1,nom,size));
+                                promotionsDB.insertRow(new Promotion(promotionsDB.getAll().get(promotionsDB.getAll().size()-1).getId()+1,nom,size));
                             }
                             case 3 -> {
-                                listsDesPromotionsSansFormateur(promotions);
+                                listsDesPromotionsSansFormateur(promotionsMemory.getAll());
                                 int choix2 = -3;
                                 while (!listDesIndexes.contains(choix2)) {
                                     System.out.print("Choisissez La promotion : ");
                                     choix2 = Integer.parseInt(ActorsFactory.br.readLine());
                                 }
-                                listsDesFormateursSansPromo(acteurs);
+                                listsDesFormateursSansPromo(comptesMemory.getAll());
                                 int choix3 = -1;
                                 while (!listDesIndexes.contains(choix3)) {
                                     System.out.print("Choisissez Le formateur : ");
                                     choix3 = Integer.parseInt(ActorsFactory.br.readLine());
                                 }
-                                // ((Formateur) acteurs.get(choix3)).setFormateurPromo(promotions.get(choix2));
-                                new ComptesMemory().updateRow(acteurs.get(choix3),promotions.get(choix2));
-                                new ComptesDB().updateRow(acteurs.get(choix3),promotions.get(choix2));
-                               // promotions.get(choix2).setFormateur((Formateur) acteurs.get(choix3));
-                                new PromotionsMemory().updateRow(promotions.get(choix2),(Formateur) acteurs.get(choix3));
+                                new ComptesMemory().updateRow(comptesMemory.getAll().get(choix3),promotionsMemory.getAll().get(choix2));
+                                new ComptesDB().updateRow(comptesMemory.getAll().get(choix3),promotionsMemory.getAll().get(choix2));
+                                new PromotionsMemory().updateRow(promotionsMemory.getAll().get(choix2),(Formateur) comptesMemory.getAll().get(choix3));
                             }
                             default -> System.out.println();
                         }
@@ -104,7 +102,7 @@ public class Main2 {
                                 try {
                                     System.out.println("Nom de Promo : " + ((Formateur) pr).getFormateurPromo().getNom());
                                     try{
-                                        listDesApprenantsDePromo(acteurs,((Formateur) pr).getFormateurPromo().getNom());
+                                        listDesApprenantsDePromo(comptesMemory.getAll(),((Formateur) pr).getFormateurPromo().getNom());
                                     }catch(Exception e) {
                                         System.out.println("Tu n'a pas encore ajouter des apprenants à votre  promo");
                                         continue;
@@ -119,7 +117,7 @@ public class Main2 {
                                 try {
                                     ((Formateur) pr).getFormateurPromo();
                                     System.out.println("-Les Apprenants Vallable est : ");
-                                    listDesApprenantsSansPromo(acteurs);
+                                    listDesApprenantsSansPromo(comptesMemory.getAll());
                                     System.out.println("-Saiser le nombre d'apprenant pour le choisissez :");
                                     System.out.println("*Saiser 0 pour sortir.");
                                     int choix3 = -1;
@@ -132,8 +130,8 @@ public class Main2 {
                                             System.out.println("Cette apprenant n'est pas vallable .");
                                             continue;
                                         }
-                                      //  ((Apprenant) acteurs.get(choix3)).setApprenantPromo(((Formateur) pr).getFormateurPromo());
-                                        new ComptesMemory().updateRow(acteurs.get(choix3),((Formateur) pr).getFormateurPromo());
+                                      //  ((Apprenant) comptesMemory.get(choix3)).setApprenantPromo(((Formateur) pr).getFormateurPromo());
+                                        new ComptesMemory().updateRow(comptesMemory.getAll().get(choix3),((Formateur) pr).getFormateurPromo());
 
                                     }
                                  }catch(Exception e){
@@ -144,19 +142,19 @@ public class Main2 {
                             case 3 -> {
                                  br = ((Formateur) pr).creerBrief();
                                  System.out.println(br.getBody());
-                                 briefs.add(br);
+                                 briefsMemory.getAll().add(br);
                             }
 
 
                             case 4->{
                                 System.out.println("Vos Briefs crées : ");
                                 listDesIndexes.clear();
-                                for (Brief brief:briefs
+                                for (Brief brief:briefsMemory.getAll()
                                 ) {
                                     if(brief.getFormateur().getFormateurPromo().equals(((Formateur) pr).getFormateurPromo())
                                       ){
-                                        listDesIndexes.add(briefs.indexOf(brief));
-                                        System.out.println(briefs.indexOf(brief)+"."+brief.getBody().toString().split("\n")[0]+"=> Ce brief va destribue à : "+brief.getStartDate());
+                                        listDesIndexes.add(briefsMemory.getAll().indexOf(brief));
+                                        System.out.println(briefsMemory.getAll().indexOf(brief)+"."+brief.getBody().toString().split("\n")[0]+"=> Ce brief va destribue à : "+brief.getStartDate());
                                     }
                                 }
                                 System.out.println("Taper le nombre de brief pour le destribuer maintenant .");
@@ -166,8 +164,8 @@ public class Main2 {
                                     System.out.println("Taper le nombre de brief pour le destribuer maintenant .");
                                     choix9 = Integer.parseInt(ActorsFactory.br.readLine());
                                 }
-                                briefs.get(choix9).setStartDate(LocalDate.now());
-                                new BriefsMemory().updateRow(briefs.get(choix9),((Formateur) pr));
+                                briefsMemory.getAll().get(choix9).setStartDate(LocalDate.now());
+                                briefsMemory.updateRow(briefsMemory.getAll().get(choix9),((Formateur) pr));
 
                             }
                             default -> System.out.println();
@@ -179,13 +177,13 @@ public class Main2 {
                          choix = Integer.parseInt(ActorsFactory.br.readLine());
                         switch (choix){
                             case 1 ->{
-                                for (Brief brief:briefs
+                                for (Brief brief:briefsMemory.getAll()
                                      ) {
                                     if(brief.getFormateur().getFormateurPromo().equals(((Apprenant) pr).getApprenantPromo())
                                             &&  LocalDate.now().isEqual(brief.getStartDate())){
                                         ((Apprenant) pr).setBriefActuel(brief);
                                         System.out.println(((Apprenant) pr).getBriefActuel().getBody());
-                                        //emailSender es = new emailSender(((Apprenant) pr).getBriefActuel().getBody(),((Apprenant) pr).getEmail(),acteurs);
+                                        //emailSender es = new emailSender(((Apprenant) pr).getBriefActuel().getBody(),((Apprenant) pr).getEmail(),comptesMemory.getAll());
                                     }
                                 }
 
@@ -200,7 +198,7 @@ public class Main2 {
 
                 }
                 break;
-            } else if (acteurs.indexOf(pr) == acteurs.size()-1) {
+            } else if (comptesMemory.getAll().indexOf(pr) == comptesMemory.getAll().size()-1) {
                 System.out.println("Email ou Mot de passe est faux");
                 continue;
             }
