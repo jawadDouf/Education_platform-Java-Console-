@@ -9,8 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BriefsMemory extends Dao<Brief, Formateur> {
-   List<Brief> briefs = new BriefsDB().getAll();
+  static List<Brief> briefs ;
 
+   static {
+       try {
+           briefs = new BriefsDB().getAll();
+       }catch (SQLException e){
+           System.out.println(e.toString());
+       }
+   }
     public BriefsMemory() throws SQLException {
     }
 
